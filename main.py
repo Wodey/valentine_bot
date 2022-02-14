@@ -8,7 +8,8 @@ with open("images/images.json") as images_file:
 with open("fonts/fonts.json") as fonts_file:
     fonts_raw = json.load(fonts_file)['fonts']
 
-font_src = f"fonts/{fonts_raw[0]['src']}"
+fo = random.choice(fonts_raw)
+font_src = f"fonts/{fo['src']}"
 
 
 

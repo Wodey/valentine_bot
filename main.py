@@ -1,36 +1,26 @@
-from PIL import Image, ImageFont, ImageDraw
-import json
-import random
+import logging
+from aiogram import Bot, Dispatcher, executor
+from os import getenv
+from dotenv import load_dotenv
 
-with open("images/images.json") as images_file:
-    images_raw = json.load(images_file)['images']
+load_dotenv()
 
-with open("fonts/fonts.json") as fonts_file:
-    fonts_raw = json.load(fonts_file)['fonts']
-
-fo = random.choice(fonts_raw)
-font_src = f"fonts/{fo['src']}"
+API_TOKEN = getenv('BOT_TOKEN')
 
 
+logging.basicConfig(level=logging.INFO)
 
-i = random.choice(images_raw)
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
 
-font = ImageFont.truetype(font_src, i["font_size"])
+@dp.message_handler(commands=['start', 'help'])
+async def start(message):
+    await message.answer('Hi')
 
-im = Image.open(f"images/{i['image']}")
-print(im.format, im.size, im.mode)
 
-from_inp = "Ванечка"
-to_inp = "Олечка"
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
 
-draw = ImageDraw.Draw(im)
 
-color = (i['color'][0], i['color'][1], i['color'][2])
 
-draw.text((i["from"][0], i["from"][1]), from_inp, color, font=font)
-draw.text((i["to"][0], i["to"][1]), to_inp, color, font=font)
-
-file_format = i['image'].split('.')[1]
-
-im.save(f"sample-out.{file_format}")
 
